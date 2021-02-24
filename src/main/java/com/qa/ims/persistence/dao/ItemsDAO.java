@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.qa.ims.persistence.domain.Customer;
 import com.qa.ims.persistence.domain.Items;
 import com.qa.ims.utils.DBUtils;
 
@@ -17,13 +20,34 @@ public class ItemsDAO implements Dao<Items> {
 	public static final Logger LOGGER = LogManager.getLogger();//this was a pre-made logger 
 	@Override
 	public List<Items> readAll() {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM items");) {//select all 
+			List<Items> Items = new ArrayList<>();
+			while (resultSet.next()) {
+				Items.add(modelFromResultSet(resultSet));
+			}
+			return Items;//if everything ok return items list to be logged out
+		} catch (SQLException e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return new ArrayList<>();//else return empty list so that the error is displayed and then nothing else
 	}
 
 	@Override
 	public Items read(Long id) {
-		// TODO Auto-generated method stub
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM items WHERE id = ?");) {
+			statement.setLong(1, id);
+			try (ResultSet resultSet = statement.executeQuery();) {
+				resultSet.next();
+				return modelFromResultSet(resultSet);
+			}
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
 		return null;
 	}
 
@@ -45,8 +69,16 @@ public class ItemsDAO implements Dao<Items> {
 	}
 
 	private Items readLatest() {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM items ORDER BY id DESC LIMIT 1");) {//select all order by id limit to 1
+			resultSet.next();//call this to move the cursor of the result set
+			return modelFromResultSet(resultSet);//if everything ok return item to be logged out
+		} catch (SQLException e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return null;//else return null 
 	}
 
 	@Override
@@ -63,8 +95,12 @@ public class ItemsDAO implements Dao<Items> {
 
 	@Override
 	public Items modelFromResultSet(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		//result set has a function called .getTYPE which lets me ask for the column in the row im after
+		Long ID = resultSet.getLong("id");
+		String ItemName = resultSet.getString("name");
+		float ItemCost = resultSet.getFloat("cost");
+		System.out.println(ID + " " + ItemName + " " + ItemCost);
+		return new Items(ID, ItemName, ItemCost);
 	}
 
 }
