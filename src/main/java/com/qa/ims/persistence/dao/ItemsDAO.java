@@ -83,7 +83,21 @@ public class ItemsDAO implements Dao<Items> {
 
 	@Override
 	public Items update(Items t) {
-		// TODO Auto-generated method stub
+		if(t.getID() == null) {
+			return null;//possible to create an item without an id this ensures it won't continue
+		}
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection
+						.prepareStatement("UPDATE items SET name = ?, cost = ? WHERE id = ?");) {
+			statement.setString(1, t.getName());
+			statement.setFloat(2, t.getCost());
+			statement.setLong(3, t.getID());
+			statement.executeUpdate();
+			return read(t.getID());
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
 		return null;
 	}
 
