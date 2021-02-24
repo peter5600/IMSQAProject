@@ -103,8 +103,16 @@ public class ItemsDAO implements Dao<Items> {
 
 	@Override
 	public int delete(long id) {
-		// TODO Auto-generated method stub
-		return 0;
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection
+						.prepareStatement("DELETE from items WHERE id = ?");) {
+			statement.setLong(1, id);
+			return statement.executeUpdate();//This give us an int which states how many rows were deleted
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return 0;//if it failed it won't have deleted anything hence 0
 	}
 
 	@Override
