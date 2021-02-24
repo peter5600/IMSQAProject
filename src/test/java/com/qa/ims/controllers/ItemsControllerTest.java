@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.qa.ims.persistence.dao.ItemsDAO;
@@ -18,7 +19,7 @@ public class ItemsControllerTest {
 	
 	private ItemsDAO ItemsDAO = new ItemsDAO();//use this for testing use as i would in the program
 	private Utils utils = new Utils();
-	@Before
+	@Before//call every time wanna reset it every time
 	public void setup() {//init the db before the tests start
 		DBUtils.connect();
 		DBUtils.getInstance().init("src/test/resources/sql-schema.sql", "src/test/resources/sql-data.sql");
@@ -54,5 +55,11 @@ public class ItemsControllerTest {
 		assertEquals(ExpectedItemBack.getName(), ReturnedItem.getName());
 		assertEquals(ExpectedItemBack.getCost(), ReturnedItem.getCost(), 0.0002);
 		assertEquals(ExpectedItemBack.getID(), ReturnedItem.getID());
+	}
+	
+	@Test
+	public void DeleteTest() {
+		//should return 1 from delete if i delete pepsi
+		assertEquals(1,ItemsDAO.delete(1));//first record has id 1 should only be 1 therefore it will delete itself
 	}
 }

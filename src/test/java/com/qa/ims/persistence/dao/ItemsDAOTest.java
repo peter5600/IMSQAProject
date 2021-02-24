@@ -78,4 +78,9 @@ public class ItemsDAOTest {
 		assertEquals(ExpectedItemBack.getCost(), ReturnedItem.getCost(), 0.0002);
 		assertEquals(ExpectedItemBack.getID(), ReturnedItem.getID());
 	}
+	
+	@Test
+	public void DeleteTest() {
+		assertEquals(1,ItemsDAO.delete(1));
+	}
 }

@@ -9,21 +9,21 @@ import com.qa.ims.persistence.dao.ItemsDAO;
 import com.qa.ims.persistence.domain.Items;
 import com.qa.ims.utils.Utils;
 
-public class ItemsController implements CrudController<Items>{
-	
+public class ItemsController implements CrudController<Items> {
+
 	private ItemsDAO ItemsDao;
-	private Utils utils;//has a scanner and getString can be used 
+	private Utils utils;// has a scanner and getString can be used
 	public static final Logger Logger = LogManager.getLogger();
-	
-	public ItemsController(ItemsDAO ItemsDAO, Utils Utils ) {
+
+	public ItemsController(ItemsDAO ItemsDAO, Utils Utils) {
 		this.ItemsDao = ItemsDAO;
 		this.utils = Utils;
 	}
-	
+
 	@Override
 	public List<Items> readAll() {
 		List<Items> items = ItemsDao.readAll();
-		for(Items item: items) {
+		for (Items item : items) {
 			Logger.info(item.toString());
 		}
 		return items;
@@ -55,8 +55,15 @@ public class ItemsController implements CrudController<Items>{
 
 	@Override
 	public int delete() {
-		// TODO Auto-generated method stub
-		return 0;
+		Logger.info("What is the id of the item you would like to delete?");
+		Long id = utils.getLong();
+		int RecordsDeleted = ItemsDao.delete(id);
+		if (RecordsDeleted == 1) {
+			Logger.info("Record deleted");
+		} else if (RecordsDeleted > 1) {
+			Logger.info("Records deleted");
+		}
+		return RecordsDeleted;
 	}
-	
+
 }
