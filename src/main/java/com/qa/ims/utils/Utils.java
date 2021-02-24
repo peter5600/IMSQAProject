@@ -53,7 +53,9 @@ public class Utils {
 	}
 
 	public float getFloat() {
-		return scanner.nextFloat();
+		float val = scanner.nextFloat();
+		scanner.nextLine();
+		return val;
 	}
 	//if i get any problems with scanner.nextInt or similar try adding nextLine this seems to solve the issue
 
