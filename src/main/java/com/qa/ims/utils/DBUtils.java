@@ -34,9 +34,8 @@ public class DBUtils {
 		this.dbUser = dbProps.getProperty("db.user", "");
 		this.dbPassword = dbProps.getProperty("db.password", "");
 		if(this.dbUrl.indexOf("jdbc:mysql") != -1) {//check for test mode
-			System.out.println(this.init("src/main/resources/sql-schema.sql", "src/main/resources/sql-data.sql"));//call this to create the db
+			this.init("src/main/resources/sql-schema.sql", "src/main/resources/sql-data.sql");//call this to create the db
 			this.dbUrl += "/ims";
-			System.out.println("Main init");  
 		}//this code creates a database and changes the url i dont want to mess with it if its in test mode
 	}
 

@@ -1,5 +1,7 @@
 package com.qa.ims.persistence.domain;
 
+import java.text.DecimalFormat;
+
 public class Items {
 	private Long ID;//add the fields i need from the ERD
 	private String Name;
@@ -23,11 +25,10 @@ public class Items {
 		//get the rest 
 	}
 	
-	/*@Override
+	@Override
 	public String toString() {
-		return String.format("", null);
-		
-	} if i need this ill add it*/
+		return String.format("ID: %d Item Name: %s Cost: %s", this.getID(), this.getName(), String.format("%.02f",this.getCost()));//2dp
+	}
 	
 	//getters and setters below
 	public Long getID() {
