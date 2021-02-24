@@ -26,8 +26,16 @@ public class OrderController implements CrudController<Order> {
 	}
 	@Override
 	public List<Order> readAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> Orders = OrderDAO.readAll();
+		for(Order O : Orders) {
+			Long OrderID = O.getOrderID();
+			List<OrderLines> OrderLines = OrderLineDAO.ReadAllOrdersBelongingToOrderID(OrderID);
+			Logger.info("-----------------------------------\nORDER-> "+O.toString());
+			for(OrderLines OrderLine: OrderLines) {
+				Logger.info("Individual Items -> " + OrderLine.toString());
+			}
+		}
+		return Orders;
 	}
 
 	@Override

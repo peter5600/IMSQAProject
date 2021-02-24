@@ -4,17 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.persistence.domain.OrderLines;
 import com.qa.ims.utils.DBUtils;
 
-public class OrderLineDAO implements Dao<OrderLines>{
+public class OrderLineDAO implements Dao<OrderLines> {
 
 	public static final Logger LOGGER = LogManager.getLogger();
+
 	@Override
 	public List<OrderLines> readAll() {
 		// TODO Auto-generated method stub
@@ -33,7 +37,7 @@ public class OrderLineDAO implements Dao<OrderLines>{
 						.prepareStatement("INSERT INTO OrderLines(OrdersID, ItemID, Quantity) VALUES (?, ?, ?)");) {
 			statement.setLong(1, Order.getOrdersID());
 			statement.setLong(2, Order.getItemID());
-			statement.setLong(2, Order.getQuantity());
+			statement.setLong(3, Order.getQuantity());
 			statement.executeUpdate();
 			return ReadLatest();
 		} catch (Exception e) {
@@ -57,14 +61,34 @@ public class OrderLineDAO implements Dao<OrderLines>{
 
 	@Override
 	public OrderLines modelFromResultSet(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Long ID = resultSet.getLong("id");
+		Long ItemID = resultSet.getLong("ItemID");
+		Long Quantity = resultSet.getLong("Quantity");
+		Long OrdersID = resultSet.getLong("OrdersID");
+		return new OrderLines(ID, OrdersID, ItemID, Quantity);
 	}
-	
+
 	public OrderLines ReadLatest() {
 		return null;
 	}
 
-	
+	public List<OrderLines> ReadAllOrdersBelongingToOrderID(long ID) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection
+						.prepareStatement("SELECT * FROM orderlines WHERE OrdersID = ?");) {
+			statement.setLong(1, ID);
+			List<OrderLines> OrderList = new ArrayList<>();
+			try (ResultSet resultSet = statement.executeQuery();) {
+				while (resultSet.next()) {
+					OrderList.add(modelFromResultSet(resultSet));
+				}
+			}
+			return OrderList;
+		} catch (SQLException e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return new ArrayList<>();
+	}
 
 }
