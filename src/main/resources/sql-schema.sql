@@ -1,5 +1,5 @@
-/*  remove this so the data remains */
-drop schema ims;/* whilst testing have this enabled*/
+/*drop schema ims;  remove this so the data remains */
+/* whilst testing have this enabled*/
 CREATE SCHEMA IF NOT EXISTS `ims`;
 
 USE `ims` ;
