@@ -68,7 +68,7 @@ public class ItemsDAO implements Dao<Items> {
 		return null;
 	}
 
-	private Items readLatest() {
+	public Items readLatest() {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM items ORDER BY id DESC LIMIT 1");) {//select all order by id limit to 1

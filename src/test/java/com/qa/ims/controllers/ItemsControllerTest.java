@@ -2,6 +2,8 @@ package com.qa.ims.controllers;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.junit.Before;
@@ -24,7 +26,21 @@ public class ItemsControllerTest {
 	
 	@Test 
 	public void CreateControllerTest() {
-		Items Item = new Items("Coke", 2.50f);
-		assertEquals(Item, ItemsDAO.create(Item));//will also return null because readlatest hasn't been implemented
+		Items Item = new Items(2l,"Coke", 2.50f);
+		assertEquals(Item.getName(), ItemsDAO.create(Item).getName());
+		assertEquals(Item.getCost(), ItemsDAO.create(Item).getCost(), 0.0002);
+		//You have to specify an acceptable delta this is teh diffrence between the floats that is ok
+	}
+	
+	@Test 
+	public void ReadAllTest() {
+		//sql data creates a record 
+		//Pepsi, 3.50f, 1
+		ArrayList<Items> ItemList = new ArrayList<>();
+		ItemList.add(new Items(1l,"Pepsi", 3.50f));
+		
+		List<Items> ValuesRead = ItemsDAO.readAll();
+		assertEquals(ItemList.get(0).getName(), ValuesRead.get(0).getName());
+		assertEquals(ItemList.get(0).getCost(), ValuesRead.get(0).getCost(), 0.0002);
 	}
 }
