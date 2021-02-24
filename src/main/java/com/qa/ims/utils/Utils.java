@@ -52,4 +52,9 @@ public class Utils {
 		return doubleInput;
 	}
 
+	public float getFloat() {
+		return scanner.nextFloat();
+	}
+	//if i get any problems with scanner.nextInt or similar try adding nextLine this seems to solve the issue
+
 }
