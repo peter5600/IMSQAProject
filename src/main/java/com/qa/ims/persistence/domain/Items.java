@@ -26,7 +26,7 @@ public class Items {
 	
 	@Override
 	public String toString() {
-		return String.format("ID: %d Item Name: %s Cost: %s", this.getID(), this.getName(), String.format("%.02f",this.getCost()));//2dp
+		return String.format("ID: %d The Item Name: %s Cost: %s", this.getID(), this.getName(), String.format("%.02f",this.getCost()));//2dp
 	}
 	
 	//getters and setters below
