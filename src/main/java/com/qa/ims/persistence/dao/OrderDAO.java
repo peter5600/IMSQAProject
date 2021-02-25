@@ -37,7 +37,17 @@ public class OrderDAO implements Dao<Order> {
 
 	@Override
 	public Order read(Long id) {
-		// TODO Auto-generated method stub
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM TBOrder WHERE id = ?");) {
+			statement.setLong(1, id);
+			try (ResultSet resultSet = statement.executeQuery();) {
+				resultSet.next();
+				return modelFromResultSet(resultSet);
+			}
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
 		return null;
 	}
 	
@@ -66,7 +76,7 @@ public class OrderDAO implements Dao<Order> {
 	}
 
 	@Override
-	public int delete(long id) {
+	public int delete(long id) { 
 		// TODO Auto-generated method stub
 		return 0;
 	}

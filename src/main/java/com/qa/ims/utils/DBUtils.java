@@ -27,7 +27,7 @@ public class DBUtils {
 		Properties dbProps = new Properties();
 		try (InputStream fis = ClassLoader.getSystemResourceAsStream(properties)) {
 			dbProps.load(fis);
-		} catch (Exception e) { 
+		} catch (Exception e) {  
 			LOGGER.error(e);
 		}
 		this.dbUrl = dbProps.getProperty("db.url", "");
