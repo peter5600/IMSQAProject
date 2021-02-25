@@ -38,4 +38,10 @@ public class OrderLinesDAOTest {
 	public void DeleteOrderLineOrders() {
 		assertEquals(1, OrderLinesDAO.DeleteOrderLinesUsingOrderID(1l));//should be deleting the first record and returning one
 	}
+	
+	@Test
+	public void DeleteAnOrderLineFromAnOrder() {//selects an order of id 1 and an item with id 1 and deletes it only exists once
+		//pass an item and an order
+		assertEquals(1, OrderLinesDAO.DeleteOrderLinesUsingItemID(1l, 1l));
+	}
 }
