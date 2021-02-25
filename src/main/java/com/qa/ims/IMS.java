@@ -33,7 +33,7 @@ public class IMS {
 		this.items = new ItemsController(itemsDAO, utils);
 		final OrderDAO OrderDAO = new OrderDAO();
 		final OrderLineDAO OrderLinesDAO = new OrderLineDAO();
-		this.orders = new OrderController(OrderDAO, OrderLinesDAO, utils);
+		this.orders = new OrderController(OrderDAO, OrderLinesDAO,itemsDAO, utils);
 	}
 
 	public void imsSystem() {
@@ -75,7 +75,7 @@ public class IMS {
 
 			LOGGER.info(() ->"What would you like to do with " + domain.name().toLowerCase() + ":");
 
-			Action.printActions();
+			Action.printActions(domain);
 			Action action = Action.getAction(utils);
 
 			if (action == Action.RETURN) {
@@ -100,6 +100,8 @@ public class IMS {
 		case DELETE:
 			crudController.delete();
 			break;
+		case COST:
+			orders.CalculateCost();
 		case RETURN:
 			break;
 		default:

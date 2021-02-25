@@ -22,9 +22,9 @@ public class Order {
 		this(CustomerID, UserID);
 		this.setOrderID(OrderID);
 	}
-	
+	@Override
 	public String toString() {
-		return String.format("ID: %x CustomerID: %x UserID: %x", this.getOrderID(), this.getCustomerID(), this.getUserID());
+		return String.format("ID: %d CustomerID: %d UserID: %d", this.getOrderID(), this.getCustomerID(), this.getUserID());
 	}
 	
 	
