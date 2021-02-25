@@ -1,6 +1,5 @@
 package com.qa.ims.persistence.domain;
 
-import java.text.DecimalFormat;
 
 public class Items {
 	private Long ID;//add the fields i need from the ERD

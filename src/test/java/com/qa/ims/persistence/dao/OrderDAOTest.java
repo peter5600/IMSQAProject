@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.qa.ims.persistence.domain.Order;
-import com.qa.ims.persistence.domain.OrderLines;
 import com.qa.ims.utils.DBUtils;
 
 public class OrderDAOTest {
@@ -23,10 +22,11 @@ public class OrderDAOTest {
 	
 	@Test
 	public void CreateOrder() {//the ids are being returned 
-		Order ExpectedOrder = new Order(2l,2l,3l);//id is being returned in hexadecimal
+		Order ExpectedOrder = new Order(2l,1l,1l);//id is being returned in hexadecimal
 		Order Created = DAO.create(ExpectedOrder);
-		System.out.println(Created.getOrderID());
-		assertEquals(ExpectedOrder, Created);
+		assertEquals(ExpectedOrder.getOrderID(), Created.getOrderID());
+		assertEquals(ExpectedOrder.getCustomerID(), Created.getCustomerID());
+		assertEquals(ExpectedOrder.getUserID(), Created.getUserID());
 	}//maybe test orderlines create as well but its just an extension of order create
 	
 	@Test

@@ -25,10 +25,10 @@ public class OrderDAO implements Dao<Order> {
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM TBOrder");) {
 			List<Order> OrderList = new ArrayList<>();
 			while (resultSet.next()) {
-				OrderList.add(modelFromResultSet(resultSet));
+				OrderList.add(modelFromResultSet(resultSet)); 
 			}
 			return OrderList;
-		} catch (SQLException e) {
+		} catch (SQLException e) { 
 			LOGGER.debug(e);
 			LOGGER.error(e.getMessage());
 		}

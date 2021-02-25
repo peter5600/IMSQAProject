@@ -7,7 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.dao.OrderDAO;
+import com.qa.ims.persistence.dao.ItemsDAO;
 import com.qa.ims.persistence.dao.OrderLineDAO;
+import com.qa.ims.persistence.domain.Items;
 import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.persistence.domain.OrderLines;
 import com.qa.ims.utils.Utils;
@@ -16,12 +18,14 @@ public class OrderController implements CrudController<Order> {
 
 	private OrderDAO OrderDAO;
 	private OrderLineDAO OrderLineDAO;
+	private ItemsDAO ItemsDAO;
 	private Utils utils;// has a scanner and getString can be used
 	public static final Logger Logger = LogManager.getLogger();
 
-	public OrderController(OrderDAO OrderDAO, OrderLineDAO OrderLineDAO, Utils Utils) {
+	public OrderController(OrderDAO OrderDAO, OrderLineDAO OrderLineDAO, ItemsDAO ItemsDAO, Utils Utils) {
 		this.OrderDAO = OrderDAO;
 		this.OrderLineDAO = OrderLineDAO;
+		this.ItemsDAO = ItemsDAO;
 		this.utils = Utils;
 	}
 
@@ -32,12 +36,12 @@ public class OrderController implements CrudController<Order> {
 			Long OrderID = O.getOrderID();
 			List<OrderLines> OrderLines = OrderLineDAO.ReadAllOrdersBelongingToOrderID(OrderID);
 			Logger.info("-----------------------------------\nORDER-> " + O.toString());
-			for (OrderLines OrderLine : OrderLines) {
+			for (OrderLines OrderLine : OrderLines) {//here
 				Logger.info("Individual Items -> " + OrderLine.toString());
 			}
 		}
 		return Orders;
-	}
+	} 
 
 	@Override
 	public Order create() {
@@ -76,6 +80,21 @@ public class OrderController implements CrudController<Order> {
 				"%x order records were deleted from the system and %x items were deleted from those orders.",
 				DeletedRecordsCount, ChildrenDeletedRecordsCount));
 		return DeletedRecordsCount;
+	}
+	
+	public float CalculateCost() {
+		float Cost =0f;
+		Logger.info("What is the id of the order that you would like to know the cost of?");
+		Long OrderID = utils.getLong();
+		List<OrderLines> OrderLines = OrderLineDAO.ReadAllOrdersBelongingToOrderID(OrderID);
+		for(OrderLines OrderLine: OrderLines) {
+			Long ItemID = OrderLine.getItemID();
+			Items Item = ItemsDAO.read(ItemID);
+			Cost += Item.getCost() * OrderLine.getQuantity();
+		}
+		Logger.info(String.format("The total cost of the order with the ID: %x is $%s", OrderID, String.format("%.02f",Cost)));
+		//get all children records and get the items id from that and add the price 
+		return 0f;
 	}
 
 }
