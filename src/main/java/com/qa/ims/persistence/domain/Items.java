@@ -5,10 +5,8 @@ public class Items {
 	private Long ID;//add the fields i need from the ERD
 	private String Name;
 	private float Cost;
-	private Long UserID;//fill out userid for the user
 	
 	public Items(String Name, float Cost) {//generate Item Constructor
-		this.setUserID(UserID);
 		this.setCost(Cost);
 		this.setName(Name);
 		
@@ -50,11 +48,6 @@ public class Items {
 		Cost = cost;
 		}
 	}
-	public Long getUserID() {
-		return UserID;
-	}
-	public void setUserID(Long userID2) {
-		UserID = userID2;
-	}
+	
 	
 }

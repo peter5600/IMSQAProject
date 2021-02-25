@@ -102,8 +102,13 @@ public class IMS {
 			break;
 		case COST:
 			orders.CalculateCost();
+			break;
 		case DELETEITEM:
 			orders.DeleteItemFromOrder();
+			break;
+		case ADDITEM:
+			orders.AddItemToOrder();
+			break;
 		case RETURN:
 			break;
 		default:

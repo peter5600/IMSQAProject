@@ -22,38 +22,34 @@ public class OrderDAOTest {
 	
 	@Test
 	public void CreateOrder() {//the ids are being returned 
-		Order ExpectedOrder = new Order(2l,1l,1l);//id is being returned in hexadecimal
+		Order ExpectedOrder = new Order(2l,1l);//id is being returned in hexadecimal
 		Order Created = DAO.create(ExpectedOrder);
 		assertEquals(ExpectedOrder.getOrderID(), Created.getOrderID());
 		assertEquals(ExpectedOrder.getCustomerID(), Created.getCustomerID());
-		assertEquals(ExpectedOrder.getUserID(), Created.getUserID());
 	}//maybe test orderlines create as well but its just an extension of order create
 	
 	@Test
 	public void ReadAllOrder() {//For reading the orders and the OrderLines attaches to the orders
 		//order is 1,1,
 		//orderlines is 1,1,5
-		Order ExpectedOrder = new Order(1l,1l,1l);
+		Order ExpectedOrder = new Order(1l,1l);
 		//(Long ID, Long OrdersID, Long ItemID, Long Quantity)
 		List<Order> Orders = DAO.readAll();
 		assertEquals(ExpectedOrder.getCustomerID(), Orders.get(0).getCustomerID());
-		assertEquals(ExpectedOrder.getUserID(), Orders.get(0).getUserID()); 
 	}
 	
 	@Test
 	public void ReadLatest() {
-		Order ExpectedOrder = new Order(1l,1l,1l);
+		Order ExpectedOrder = new Order(1l,1l);
 		Order ActualOrder = DAO.ReadLatest();
 		assertEquals(ExpectedOrder.getCustomerID(), ActualOrder.getCustomerID());
-		assertEquals(ExpectedOrder.getUserID(), ActualOrder.getUserID());
 	}
 	
 	@Test
 	public void ReadID() {
-		Order ExpectedOrder = new Order(1l,1l,1l);
+		Order ExpectedOrder = new Order(1l,1l);
 		Order ActualOrder = DAO.read(1l);
 		assertEquals(ExpectedOrder.getCustomerID(), ActualOrder.getCustomerID());
-		assertEquals(ExpectedOrder.getUserID(), ActualOrder.getUserID());
 	}
 	
 	@Test

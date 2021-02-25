@@ -11,20 +11,18 @@ package com.qa.ims.persistence.domain;
 public class Order {
 	private Long OrderID;
 	private Long CustomerID;
-	private Long UserID;
 	
-	public Order(Long CustomerID, Long UserID) {
+	public Order(Long CustomerID) {
 		this.setCustomerID(CustomerID);
-		this.setUserID(UserID);
 	}
 	
-	public Order(Long OrderID, Long CustomerID, Long UserID) {
-		this(CustomerID, UserID);
+	public Order(Long OrderID, Long CustomerID) {
+		this(CustomerID);
 		this.setOrderID(OrderID);
 	}
 	@Override
 	public String toString() {
-		return String.format("ID: %d CustomerID: %d UserID: %d", this.getOrderID(), this.getCustomerID(), this.getUserID());
+		return String.format("ID: %d CustomerID: %d ", this.getOrderID(), this.getCustomerID());
 	}
 	
 	
@@ -40,10 +38,5 @@ public class Order {
 	public void setCustomerID(Long customerID) {
 		CustomerID = customerID;
 	}
-	public Long getUserID() {
-		return UserID;
-	}
-	public void setUserID(Long userID) {
-		UserID = userID;
-	}
+	
 }
