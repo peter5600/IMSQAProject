@@ -47,7 +47,7 @@ public class OrderController implements CrudController<Order> {
 	public Order create() {
 		Logger.info("What is the id of the customer the order is for");
 		Long CustomerID = utils.getLong();
-		Order Order = OrderDAO.create(new Order(CustomerID, 1l));// 1 is the current userid
+		Order Order = OrderDAO.create(new Order(CustomerID));// 1 is the current userid
 		Long OrderID = Order.getOrderID();
 		String Input = "";
 		while (!Input.equals("finish")) {

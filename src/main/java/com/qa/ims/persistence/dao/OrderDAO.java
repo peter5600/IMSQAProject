@@ -34,7 +34,7 @@ public class OrderDAO implements Dao<Order> {
 		}
 		return new ArrayList<>();
 	}
-
+ 
 	@Override
 	public Order read(Long id) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
@@ -57,9 +57,8 @@ public class OrderDAO implements Dao<Order> {
 	public Order create(Order order) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
-						.prepareStatement("INSERT INTO TBOrder(CustomerID, UserID) VALUES (?, ?)");) {
+						.prepareStatement("INSERT INTO TBOrder(CustomerID) VALUES (?)");) {
 			statement.setLong(1, order.getCustomerID());
-			statement.setLong(2, order.getUserID());
 			statement.executeUpdate();
 			return ReadLatest();
 		} catch (Exception e) {
@@ -94,8 +93,7 @@ public class OrderDAO implements Dao<Order> {
 		// TODO Auto-generated method stub
 		Long ID = resultSet.getLong("id");
 		Long CustomerID = resultSet.getLong("CustomerID");
-		Long UserID = resultSet.getLong("UserID");
-		return new Order(ID, CustomerID, UserID);
+		return new Order(ID, CustomerID);
 	}
 	
 	public Order ReadLatest() {

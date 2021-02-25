@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.persistence.domain.OrderLines;
 import com.qa.ims.utils.DBUtils;
 
@@ -35,7 +34,7 @@ public class OrderLineDAO implements Dao<OrderLines> {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
 						.prepareStatement("INSERT INTO OrderLines(OrdersID, ItemID, Quantity) VALUES (?, ?, ?)");) {
-			statement.setLong(1, Order.getOrdersID());
+			statement.setLong(1, Order.getOrdersID()); 
 			statement.setLong(2, Order.getItemID());
 			statement.setLong(3, Order.getQuantity());
 			statement.executeUpdate();
