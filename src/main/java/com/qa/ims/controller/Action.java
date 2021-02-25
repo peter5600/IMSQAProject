@@ -37,11 +37,9 @@ public enum Action {
 	 */
 	public static void printActions(Domain CurrentDomain) {
 		for (Action action : Action.values()) {
-			if(action.equals(Action.COST) && CurrentDomain.name().equals("ORDER")) {
+			if(CurrentDomain.name().equals("ORDER")) {
 				LOGGER.info(action.getDescription());
-			}else if(action.equals(Action.DELETEITEM) && CurrentDomain.name().equals("ORDER")) {
-				LOGGER.info(action.getDescription());
-			}else if(!action.equals(Action.COST)) {
+			}else if(!action.equals(Action.COST) && !action.equals(Action.DELETEITEM)) {
 				LOGGER.info(action.getDescription());
 			}
 			
