@@ -55,10 +55,9 @@ public class ItemsDAO implements Dao<Items> {
 	public Items create(Items t) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
-						.prepareStatement("INSERT INTO items(name, cost, UserID) VALUES (?, ?, ?)");) {//user id doesn't exist yet so its just 1 
+						.prepareStatement("INSERT INTO items(name, cost) VALUES (?, ?)");) {//user id doesn't exist yet so its just 1 
 			statement.setString(1, t.getName());
-			statement.setFloat(2, t.getCost());
-			statement.setLong(3, /*t.getUserID()*/1);//when i add users change this back
+			statement.setFloat(2, t.getCost());//when i add users change this back
 			statement.executeUpdate();
 			return readLatest();
 		} catch (Exception e) {

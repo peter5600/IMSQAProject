@@ -44,4 +44,14 @@ public class OrderLinesDAOTest {
 		//pass an item and an order
 		assertEquals(1, OrderLinesDAO.DeleteOrderLinesUsingItemID(1l, 1l));
 	}
+	
+	@Test
+	public void AddAnitemToAnOrder() {//selects an order of id 1 and an item with id 1 and deletes it only exists once
+		//pass an item and an order
+		OrderLines OrderLine = new OrderLines(1l,1l,1l);//orders item quantity
+		OrderLines ReturnedValue = OrderLinesDAO.AddItemsToOrderLines(1l, 1l, 1l);
+		assertEquals(OrderLine.getOrdersID(), ReturnedValue.getOrdersID());//orders item quantity
+		assertEquals(OrderLine.getItemID(), ReturnedValue.getItemID());//orders item quantity
+		assertEquals(OrderLine.getQuantity(), ReturnedValue.getQuantity());//orders item quantity
+	}
 }
