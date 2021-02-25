@@ -41,8 +41,8 @@ public class OrderLines {
 	public void setQuantity(Long quantity) {
 		Quantity = quantity;
 	}
-	
+	@Override
 	public String toString() {
-		return String.format("ID: %x ItemID: %x Quantity: %x", this.getId(), this.getItemID(), this.getQuantity());
+		return String.format("ID: %d ItemID: %d Quantity: %d", this.getId(), this.getItemID(), this.getQuantity());
 	}
 }

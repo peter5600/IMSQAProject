@@ -60,7 +60,7 @@ public class OrderLineDAO implements Dao<OrderLines> {
 	}
 
 	@Override
-	public OrderLines modelFromResultSet(ResultSet resultSet) throws SQLException {
+	public OrderLines modelFromResultSet(ResultSet resultSet) throws SQLException {//values read correctley here not hex
 		Long ID = resultSet.getLong("id");
 		Long ItemID = resultSet.getLong("ItemID");
 		Long Quantity = resultSet.getLong("Quantity");
@@ -69,10 +69,19 @@ public class OrderLineDAO implements Dao<OrderLines> {
 	}
 
 	public OrderLines ReadLatest() {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM orderlines ORDER BY id DESC LIMIT 1");) {
+			resultSet.next();
+			return modelFromResultSet(resultSet);
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
 		return null;
 	}
 
-	public List<OrderLines> ReadAllOrdersBelongingToOrderID(long ID) {
+	public List<OrderLines> ReadAllOrdersBelongingToOrderID(long ID) {//This returns correct value as well
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
 						.prepareStatement("SELECT * FROM orderlines WHERE OrdersID = ?");) {
@@ -91,10 +100,10 @@ public class OrderLineDAO implements Dao<OrderLines> {
 		return new ArrayList<>();
 	}
 
-	public int DeleteOrderLinesUsingOrderID(Long ID) {
+	public int DeleteOrderLinesUsingOrderID(Long ID) { 
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection.prepareStatement("DELETE FROM orderlines WHERE OrdersID = ?");) {
-			statement.setLong(1, ID);
+			statement.setLong(1, ID); 
 			return statement.executeUpdate();
 		} catch (Exception e) {
 			LOGGER.debug(e);

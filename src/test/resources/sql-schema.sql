@@ -1,8 +1,11 @@
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS `customers`;
-DROP TABLE IF EXISTS `items`;
-DROP TABLE IF EXISTS `TBOrder`;
 DROP TABLE IF EXISTS `orderlines`;
+DROP TABLE IF EXISTS `TBOrder`;
+DROP TABLE IF EXISTS `items`;
+DROP TABLE IF EXISTS `customers`;
+
+
+
 
 CREATE TABLE IF NOT EXISTS `customers` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -23,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `TBOrder`(/*Might wanna change all int(11) to Longh i
 	`id` LONG AUTO_INCREMENT PRIMARY KEY NOT NULL,
     `CustomerID` INT(11) NOT NULL,
     `UserID` INT(11) NOT NULL,
-    foreign key(CustomerID) REFERENCES customers(id) /*,
+    foreign key(CustomerID) REFERENCES customers(id) ON DELETE CASCADE /*,
      foreign key(UserID) REFERENCES users(ID) remove until users added*/
 );
 
@@ -32,8 +35,8 @@ CREATE TABLE IF NOT EXISTS `orderlines`(
     `OrdersID` INT(11) NOT NULL,
     `ItemID` INT(11) NOT NULL,
     `Quantity` INT(11) NOT NULL,
-    foreign key(OrdersID) REFERENCES TBOrder(id),
-    foreign key(ItemID) REFERENCES items(id)
+    foreign key(OrdersID) REFERENCES TBOrder(id) ON DELETE CASCADE,
+    foreign key(ItemID) REFERENCES items(id) ON DELETE CASCADE
 );
 
 
