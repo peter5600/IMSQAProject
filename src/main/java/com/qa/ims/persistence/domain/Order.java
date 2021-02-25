@@ -23,6 +23,10 @@ public class Order {
 		this.setOrderID(OrderID);
 	}
 	
+	public String toString() {
+		return String.format("ID: %x CustomerID: %x UserID: %x", this.getOrderID(), this.getCustomerID(), this.getUserID());
+	}
+	
 	
 	public Long getOrderID() {
 		return OrderID;
