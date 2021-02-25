@@ -15,7 +15,7 @@ public enum Action {
 	CREATE("To save a new entity into the database"), READ("To read an entity from the database"),
 	UPDATE("To change an entity already in the database"), DELETE("To remove an entity from the database"), 
 	COST("To calculate the cost of an order"),
-	DELETEITEM("To remove an item from an order"), RETURN("To return to domain selection");
+	DELETEITEM("To remove an item from an order"), ADDITEM("To add an item to an order"), RETURN("To return to domain selection");
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
@@ -39,7 +39,7 @@ public enum Action {
 		for (Action action : Action.values()) {
 			if(CurrentDomain.name().equals("ORDER")) {
 				LOGGER.info(action.getDescription());
-			}else if(!action.equals(Action.COST) && !action.equals(Action.DELETEITEM)) {
+			}else if(!action.equals(Action.COST) && !action.equals(Action.DELETEITEM) && !action.equals(Action.ADDITEM)) {
 				LOGGER.info(action.getDescription());
 			}
 			

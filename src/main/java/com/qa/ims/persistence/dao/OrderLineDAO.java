@@ -126,5 +126,20 @@ public class OrderLineDAO implements Dao<OrderLines> {
 		return 0;// no records deleted
 
 	}
+	
+	public OrderLines AddItemsToOrderLines(Long OrderID, Long ItemID, Long Quantity) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection.prepareStatement("INSERT INTO orderlines(OrdersID, ItemID, Quantity) VALUES (?, ?, ?)");) {
+			statement.setLong(1, OrderID); 
+			statement.setLong(2, ItemID); 
+			statement.setLong(3, Quantity);
+			statement.executeUpdate();
+			return ReadLatest();
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return null;
+	}
 
 }

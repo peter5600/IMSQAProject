@@ -107,5 +107,17 @@ public class OrderController implements CrudController<Order> {
 		Logger.info(String.format("Item ID: %d was removed from Order ID: %d %d many times", ItemID, OrderID, RecordsDeleted));
 		return RecordsDeleted;
 	}
+	
+	public OrderLines AddItemToOrder() {
+		Logger.info("What is the ID of the order that you want to delete an item from");
+		Long OrderID = utils.getLong();
+		Logger.info("What is the id of the item that you would like to add to the order");
+		Long ItemID = utils.getLong();
+		Logger.info("How many items should be added to the order");
+		Long Quantity = utils.getLong();
+		OrderLines OrderAdded = OrderLineDAO.AddItemsToOrderLines(OrderID, ItemID, Quantity);
+		Logger.info("Item added to the order");
+		return OrderAdded;
+	}
 
 }
