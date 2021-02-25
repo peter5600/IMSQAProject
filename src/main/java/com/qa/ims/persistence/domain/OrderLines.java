@@ -12,6 +12,11 @@ public class OrderLines {
 		this.setQuantity(Quantity);
 	}
 	
+	public OrderLines(Long ID, Long OrdersID, Long ItemID, Long Quantity) {
+		this(OrdersID, ItemID, Quantity);
+		this.setId(ID);
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -35,5 +40,9 @@ public class OrderLines {
 	}
 	public void setQuantity(Long quantity) {
 		Quantity = quantity;
+	}
+	
+	public String toString() {
+		return String.format("ID: %x ItemID: %x Quantity: %x", this.getId(), this.getItemID(), this.getQuantity());
 	}
 }
