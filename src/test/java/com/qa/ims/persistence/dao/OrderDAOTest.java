@@ -23,7 +23,7 @@ public class OrderDAOTest {
 	}
 	
 	@Test
-	public void CreateOrder() {
+	public void CreateOrder() {//the ids are being returned 
 		Order ExpectedOrder = new Order(2l,2l,3l);//id is being returned in hexadecimal
 		Order Created = DAO.create(ExpectedOrder);
 		System.out.println(Created.getOrderID());
@@ -31,7 +31,7 @@ public class OrderDAOTest {
 	}//maybe test orderlines create as well but its just an extension of order create
 	
 	@Test
-	public void ReadAllOrder() {
+	public void ReadAllOrder() {//For reading the orders and the OrderLines attaches to the orders
 		//order is 1,1,
 		//orderlines is 1,1,5
 		Order ExpectedOrder = new Order(1l,1l,1l);
@@ -49,21 +49,18 @@ public class OrderDAOTest {
 	
 	@Test
 	public void ReadLatest() {
-		
+		Order ExpectedOrder = new Order(1l,1l,1l);
+		Order ActualOrder = DAO.ReadLatest();
+		assertEquals(ExpectedOrder.getCustomerID(), ActualOrder.getCustomerID());
+		assertEquals(ExpectedOrder.getUserID(), ActualOrder.getUserID());
 	}
 	
 	@Test
 	public void ReadID() {
-		
+		Order ExpectedOrder = new Order(1l,1l,1l);
+		Order ActualOrder = DAO.read(1l);
+		assertEquals(ExpectedOrder.getCustomerID(), ActualOrder.getCustomerID());
+		assertEquals(ExpectedOrder.getUserID(), ActualOrder.getUserID());
 	}
 	
-	@Test 
-	public void OrderModelFromResult() {
-		
-	}
-	
-	@Test
-	public void OrderLinesModelFromResult() {
-		
-	}
 }
