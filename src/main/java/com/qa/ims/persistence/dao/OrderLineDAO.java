@@ -112,5 +112,19 @@ public class OrderLineDAO implements Dao<OrderLines> {
 		return 0;// no records deleted
 
 	}
+	
+	public int DeleteOrderLinesUsingItemID(Long ID, Long OrdersID) { 
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM orderlines WHERE ItemID = ? and OrdersID = ?");) {
+			statement.setLong(1, ID); 
+			statement.setLong(2, OrdersID); 
+			return statement.executeUpdate();
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return 0;// no records deleted
+
+	}
 
 }

@@ -36,12 +36,12 @@ public class OrderController implements CrudController<Order> {
 			Long OrderID = O.getOrderID();
 			List<OrderLines> OrderLines = OrderLineDAO.ReadAllOrdersBelongingToOrderID(OrderID);
 			Logger.info("-----------------------------------\nORDER-> " + O.toString());
-			for (OrderLines OrderLine : OrderLines) {//here
+			for (OrderLines OrderLine : OrderLines) {// here
 				Logger.info("Individual Items -> " + OrderLine.toString());
 			}
 		}
 		return Orders;
-	} 
+	}
 
 	@Override
 	public Order create() {
@@ -81,20 +81,31 @@ public class OrderController implements CrudController<Order> {
 				DeletedRecordsCount, ChildrenDeletedRecordsCount));
 		return DeletedRecordsCount;
 	}
-	
+
 	public float CalculateCost() {
-		float Cost =0f;
+		float Cost = 0f;
 		Logger.info("What is the id of the order that you would like to know the cost of?");
 		Long OrderID = utils.getLong();
 		List<OrderLines> OrderLines = OrderLineDAO.ReadAllOrdersBelongingToOrderID(OrderID);
-		for(OrderLines OrderLine: OrderLines) {
+		for (OrderLines OrderLine : OrderLines) {
 			Long ItemID = OrderLine.getItemID();
 			Items Item = ItemsDAO.read(ItemID);
 			Cost += Item.getCost() * OrderLine.getQuantity();
 		}
-		Logger.info(String.format("The total cost of the order with the ID: %x is $%s", OrderID, String.format("%.02f",Cost)));
-		//get all children records and get the items id from that and add the price 
+		Logger.info(String.format("The total cost of the order with the ID: %x is $%s", OrderID,
+				String.format("%.02f", Cost)));
+		// get all children records and get the items id from that and add the price
 		return 0f;
+	}
+
+	public int DeleteItemFromOrder() {
+		Logger.info("What is the ID of the order that you want to delete an item from");
+		Long OrderID = utils.getLong();
+		Logger.info("What is the id of the item that you would like to remove. If this item exists multiple times in an order all of the orders for that item will be removed.");
+		Long ItemID = utils.getLong();
+		int RecordsDeleted = OrderLineDAO.DeleteOrderLinesUsingItemID(ItemID, OrderID);
+		Logger.info(String.format("Item ID: %d was removed from Order ID: %d %d many times", ItemID, OrderID, RecordsDeleted));
+		return RecordsDeleted;
 	}
 
 }

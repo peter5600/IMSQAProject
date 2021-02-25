@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `ims`.`customers` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `first_name` VARCHAR(40) DEFAULT NULL,
     `surname` VARCHAR(40) DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`) 
 );
 
 CREATE TABLE IF NOT EXISTS `ims`.`items`(
@@ -20,11 +20,11 @@ CREATE TABLE IF NOT EXISTS `ims`.`items`(
     foreign key(UserID) REFERENCES users(ID) remove until users added*/
 );
 
-CREATE TABLE IF NOT EXISTS `ims`.`TBOrder`(
-	`id` INT(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+CREATE TABLE IF NOT EXISTS `ims`.`TBOrder`(/*Might wanna change all int(11) to Longh instead*/
+	`id` LONG AUTO_INCREMENT PRIMARY KEY NOT NULL,
     `CustomerID` INT(11) NOT NULL,
     `UserID` INT(11) NOT NULL,
-    foreign key(CustomerID) REFERENCES customers(id)/*,
+    foreign key(CustomerID) REFERENCES customers(id) ON DELETE CASCADE /*,
      foreign key(UserID) REFERENCES users(ID) remove until users added*/
 );
 
@@ -33,6 +33,6 @@ CREATE TABLE IF NOT EXISTS `ims`.`orderlines`(
     `OrdersID` INT(11) NOT NULL,
     `ItemID` INT(11) NOT NULL,
     `Quantity` INT(11) NOT NULL,
-    foreign key(OrdersID) REFERENCES TBOrder(id),
-    foreign key(ItemID) REFERENCES items(id)/*dONT oN DELETE CASCADE because if an item is removed we should still know about the order*/
+    foreign key(OrdersID) REFERENCES TBOrder(id) ON DELETE CASCADE,
+    foreign key(ItemID) REFERENCES items(id) ON DELETE CASCADE
 );
