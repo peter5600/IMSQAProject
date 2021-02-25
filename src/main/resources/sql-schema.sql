@@ -34,5 +34,5 @@ CREATE TABLE IF NOT EXISTS `ims`.`orderlines`(
     `ItemID` INT(11) NOT NULL,
     `Quantity` INT(11) NOT NULL,
     foreign key(OrdersID) REFERENCES TBOrder(id),
-    foreign key(ItemID) REFERENCES items(id)
+    foreign key(ItemID) REFERENCES items(id)/*dONT oN DELETE CASCADE because if an item is removed we should still know about the order*/
 );
