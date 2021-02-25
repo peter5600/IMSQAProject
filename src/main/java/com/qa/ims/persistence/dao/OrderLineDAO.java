@@ -91,4 +91,17 @@ public class OrderLineDAO implements Dao<OrderLines> {
 		return new ArrayList<>();
 	}
 
+	public int DeleteOrderLinesUsingOrderID(Long ID) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM orderlines WHERE OrdersID = ?");) {
+			statement.setLong(1, ID);
+			return statement.executeUpdate();
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return 0;// no records deleted
+
+	}
+
 }
