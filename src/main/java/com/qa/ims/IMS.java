@@ -67,7 +67,7 @@ public class IMS {
 			case ORDER:
 				active = this.orders;
 				break;
-			case STOP:
+			case STOP: 
 				return;
 			default:
 				break;
