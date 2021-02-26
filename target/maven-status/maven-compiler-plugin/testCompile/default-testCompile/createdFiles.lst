@@ -1,0 +1,11 @@
+com\qa\ims\persistence\domain\CustomerTest.class
+com\qa\ims\controllers\OrderControllerTest.class
+com\qa\ims\persistence\dao\OrderDAOTest.class
+com\qa\ims\controllers\CustomerControllerTest.class
+com\qa\ims\persistence\domain\OrderTest.class
+com\qa\ims\persistence\dao\ItemsDAOTest.class
+com\qa\ims\controllers\ItemsControllerTest.class
+com\qa\ims\persistence\dao\OrderLinesDAOTest.class
+com\qa\ims\controllers\ActionTest.class
+com\qa\ims\persistence\domain\ItemsTest.class
+com\qa\ims\persistence\dao\CustomerDAOTest.class

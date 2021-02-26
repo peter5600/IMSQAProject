@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ims</a> &gt; <a href="index.source.html" class="el_package">com.qa.ims.controller</a> &gt; <span class="el_source">ItemsController.java</span></div><h1>ItemsController.java</h1><pre class="source lang-java linenums">package com.qa.ims.controller;
+
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.qa.ims.persistence.dao.ItemsDAO;
+import com.qa.ims.persistence.domain.Items;
+import com.qa.ims.utils.Utils;
+
+public class ItemsController implements CrudController&lt;Items&gt; {
+
+	private ItemsDAO ItemsDao;
+	private Utils utils;// has a scanner and getString can be used
+<span class="fc" id="L16">	public static final Logger Logger = LogManager.getLogger();</span>
+
+<span class="fc" id="L18">	public ItemsController(ItemsDAO ItemsDAO, Utils Utils) {</span>
+<span class="fc" id="L19">		this.ItemsDao = ItemsDAO;</span>
+<span class="fc" id="L20">		this.utils = Utils;</span>
+<span class="fc" id="L21">	}</span>
+
+	@Override
+	public List&lt;Items&gt; readAll() {
+<span class="fc" id="L25">		List&lt;Items&gt; items = ItemsDao.readAll();</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		for (Items item : items) {</span>
+<span class="fc" id="L27">			Logger.info(item.toString());</span>
+<span class="fc" id="L28">		}</span>
+<span class="fc" id="L29">		return items;</span>
+	}
+
+	@Override
+	public Items create() {
+<span class="nc" id="L34">		Logger.info(&quot;Please enter a name for the Item.&quot;);</span>
+<span class="nc" id="L35">		String ItemName = utils.getString();</span>
+<span class="nc" id="L36">		Logger.info(&quot;Please enter a cost for the Item.&quot;);</span>
+<span class="nc" id="L37">		float cost = utils.getFloat();</span>
+<span class="nc" id="L38">		Items Item = ItemsDao.create(new Items(ItemName, cost));</span>
+<span class="nc" id="L39">		Logger.info(&quot;Item has been created.&quot;);</span>
+<span class="nc" id="L40">		return Item;</span>
+	}
+
+	@Override
+	public Items update() {
+<span class="nc" id="L45">		Logger.info(&quot;What is the ID of the item that you want to update&quot;);</span>
+<span class="nc" id="L46">		Long id = utils.getLong();</span>
+<span class="nc" id="L47">		Logger.info(&quot;What is the new Item name for this product&quot;);</span>
+<span class="nc" id="L48">		String ItemName = utils.getString();</span>
+<span class="nc" id="L49">		Logger.info(&quot;What is the new Item cost for this product&quot;);</span>
+<span class="nc" id="L50">		float ItemCost = utils.getFloat();</span>
+<span class="nc" id="L51">		Items UpdatedItem = ItemsDao.update(new Items(id, ItemName, ItemCost));</span>
+<span class="nc" id="L52">		Logger.info(&quot;The item has been updated&quot;);</span>
+<span class="nc" id="L53">		return UpdatedItem;</span>
+	}
+
+	@Override
+	public int delete() {
+<span class="fc" id="L58">		Logger.info(&quot;What is the id of the item you would like to delete?&quot;);</span>
+<span class="fc" id="L59">		Long id = utils.getLong();</span>
+<span class="fc" id="L60">		int RecordsDeleted = ItemsDao.delete(id);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		if (RecordsDeleted == 1) {</span>
+<span class="fc" id="L62">			Logger.info(&quot;Record deleted&quot;);</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">		} else if (RecordsDeleted &gt; 1) {</span>
+<span class="fc" id="L64">			Logger.info(&quot;Records deleted&quot;);</span>
+		}
+<span class="fc" id="L66">		return RecordsDeleted;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

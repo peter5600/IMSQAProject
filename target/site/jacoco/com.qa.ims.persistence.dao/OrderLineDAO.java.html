@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderLineDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ims</a> &gt; <a href="index.source.html" class="el_package">com.qa.ims.persistence.dao</a> &gt; <span class="el_source">OrderLineDAO.java</span></div><h1>OrderLineDAO.java</h1><pre class="source lang-java linenums">package com.qa.ims.persistence.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.qa.ims.persistence.domain.OrderLines;
+import com.qa.ims.utils.DBUtils;
+
+<span class="fc" id="L17">public class OrderLineDAO implements Dao&lt;OrderLines&gt; {</span>
+
+<span class="fc" id="L19">	public static final Logger LOGGER = LogManager.getLogger();</span>
+
+	@Override
+	public List&lt;OrderLines&gt; readAll() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L24">		return null;</span>
+	}
+
+	@Override
+	public OrderLines read(Long id) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L30">		return null;</span>
+	}
+
+	public OrderLines create(OrderLines Order) {
+<span class="fc" id="L34">		try (Connection connection = DBUtils.getInstance().getConnection();</span>
+<span class="fc" id="L35">				PreparedStatement statement = connection</span>
+<span class="fc" id="L36">						.prepareStatement(&quot;INSERT INTO OrderLines(OrdersID, ItemID, Quantity) VALUES (?, ?, ?)&quot;);) {</span>
+<span class="fc" id="L37">			statement.setLong(1, Order.getOrdersID()); </span>
+<span class="fc" id="L38">			statement.setLong(2, Order.getItemID());</span>
+<span class="fc" id="L39">			statement.setLong(3, Order.getQuantity());</span>
+<span class="fc" id="L40">			statement.executeUpdate();</span>
+<span class="fc" id="L41">			return ReadLatest();</span>
+<span class="nc" id="L42">		} catch (Exception e) {</span>
+<span class="nc" id="L43">			LOGGER.debug(e);</span>
+<span class="nc" id="L44">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L46">		return null;</span>
+	}
+
+	@Override
+	public OrderLines update(OrderLines t) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L52">		return null;</span>
+	}
+
+	@Override
+	public int delete(long id) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L58">		return 0;</span>
+	}
+
+	@Override
+	public OrderLines modelFromResultSet(ResultSet resultSet) throws SQLException {//values read correctley here not hex
+<span class="fc" id="L63">		Long ID = resultSet.getLong(&quot;id&quot;);</span>
+<span class="fc" id="L64">		Long ItemID = resultSet.getLong(&quot;ItemID&quot;);</span>
+<span class="fc" id="L65">		Long Quantity = resultSet.getLong(&quot;Quantity&quot;);</span>
+<span class="fc" id="L66">		Long OrdersID = resultSet.getLong(&quot;OrdersID&quot;);</span>
+<span class="fc" id="L67">		return new OrderLines(ID, OrdersID, ItemID, Quantity);</span>
+	}
+
+	public OrderLines ReadLatest() {
+<span class="fc" id="L71">		try (Connection connection = DBUtils.getInstance().getConnection();</span>
+<span class="fc" id="L72">				Statement statement = connection.createStatement();</span>
+<span class="fc" id="L73">				ResultSet resultSet = statement.executeQuery(&quot;SELECT * FROM orderlines ORDER BY id DESC LIMIT 1&quot;);) {</span>
+<span class="fc" id="L74">			resultSet.next();</span>
+<span class="fc" id="L75">			return modelFromResultSet(resultSet);</span>
+<span class="nc" id="L76">		} catch (Exception e) {</span>
+<span class="nc" id="L77">			LOGGER.debug(e);</span>
+<span class="nc" id="L78">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L80">		return null;</span>
+	}
+
+	public List&lt;OrderLines&gt; ReadAllOrdersBelongingToOrderID(long ID) {//This returns correct value as well
+<span class="fc" id="L84">		try (Connection connection = DBUtils.getInstance().getConnection();</span>
+<span class="fc" id="L85">				PreparedStatement statement = connection</span>
+<span class="fc" id="L86">						.prepareStatement(&quot;SELECT * FROM orderlines WHERE OrdersID = ?&quot;);) {</span>
+<span class="fc" id="L87">			statement.setLong(1, ID);</span>
+<span class="fc" id="L88">			List&lt;OrderLines&gt; OrderList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L89">			try (ResultSet resultSet = statement.executeQuery();) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">				while (resultSet.next()) {</span>
+<span class="fc" id="L91">					OrderList.add(modelFromResultSet(resultSet));</span>
+				}
+			}
+<span class="fc" id="L94">			return OrderList;</span>
+<span class="nc" id="L95">		} catch (SQLException e) {</span>
+<span class="nc" id="L96">			LOGGER.debug(e);</span>
+<span class="nc" id="L97">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L99">		return new ArrayList&lt;&gt;();</span>
+	}
+
+	public int DeleteOrderLinesUsingOrderID(Long ID) { 
+<span class="fc" id="L103">		try (Connection connection = DBUtils.getInstance().getConnection();</span>
+<span class="fc" id="L104">				PreparedStatement statement = connection.prepareStatement(&quot;DELETE FROM orderlines WHERE OrdersID = ?&quot;);) {</span>
+<span class="fc" id="L105">			statement.setLong(1, ID); </span>
+<span class="fc" id="L106">			return statement.executeUpdate();</span>
+<span class="nc" id="L107">		} catch (Exception e) {</span>
+<span class="nc" id="L108">			LOGGER.debug(e);</span>
+<span class="nc" id="L109">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L111">		return 0;// no records deleted</span>
+
+	}
+	
+	public int DeleteOrderLinesUsingItemID(Long ID, Long OrdersID) { 
+<span class="fc" id="L116">		try (Connection connection = DBUtils.getInstance().getConnection();</span>
+<span class="fc" id="L117">				PreparedStatement statement = connection.prepareStatement(&quot;DELETE FROM orderlines WHERE ItemID = ? and OrdersID = ?&quot;);) {</span>
+<span class="fc" id="L118">			statement.setLong(1, ID); </span>
+<span class="fc" id="L119">			statement.setLong(2, OrdersID); </span>
+<span class="fc" id="L120">			return statement.executeUpdate();</span>
+<span class="nc" id="L121">		} catch (Exception e) {</span>
+<span class="nc" id="L122">			LOGGER.debug(e);</span>
+<span class="nc" id="L123">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L125">		return 0;// no records deleted</span>
+
+	}
+	
+	public OrderLines AddItemsToOrderLines(Long OrderID, Long ItemID, Long Quantity) {
+<span class="fc" id="L130">		try (Connection connection = DBUtils.getInstance().getConnection();</span>
+<span class="fc" id="L131">				PreparedStatement statement = connection.prepareStatement(&quot;INSERT INTO orderlines(OrdersID, ItemID, Quantity) VALUES (?, ?, ?)&quot;);) {</span>
+<span class="fc" id="L132">			statement.setLong(1, OrderID); </span>
+<span class="fc" id="L133">			statement.setLong(2, ItemID); </span>
+<span class="fc" id="L134">			statement.setLong(3, Quantity);</span>
+<span class="fc" id="L135">			statement.executeUpdate();</span>
+<span class="fc" id="L136">			return ReadLatest();</span>
+<span class="nc" id="L137">		} catch (Exception e) {</span>
+<span class="nc" id="L138">			LOGGER.debug(e);</span>
+<span class="nc" id="L139">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L141">		return null;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

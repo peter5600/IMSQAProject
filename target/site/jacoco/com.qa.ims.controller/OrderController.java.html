@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ims</a> &gt; <a href="index.source.html" class="el_package">com.qa.ims.controller</a> &gt; <span class="el_source">OrderController.java</span></div><h1>OrderController.java</h1><pre class="source lang-java linenums">package com.qa.ims.controller;
+
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.qa.ims.persistence.dao.OrderDAO;
+import com.qa.ims.persistence.dao.ItemsDAO;
+import com.qa.ims.persistence.dao.OrderLineDAO;
+import com.qa.ims.persistence.domain.Items;
+import com.qa.ims.persistence.domain.Order;
+import com.qa.ims.persistence.domain.OrderLines;
+import com.qa.ims.utils.Utils;
+
+public class OrderController implements CrudController&lt;Order&gt; {
+
+	private OrderDAO OrderDAO;
+	private OrderLineDAO OrderLineDAO;
+	private ItemsDAO ItemsDAO;
+	private Utils utils;// has a scanner and getString can be used
+<span class="fc" id="L22">	public static final Logger Logger = LogManager.getLogger();</span>
+
+<span class="fc" id="L24">	public OrderController(OrderDAO OrderDAO, OrderLineDAO OrderLineDAO, ItemsDAO ItemsDAO, Utils Utils) {</span>
+<span class="fc" id="L25">		this.OrderDAO = OrderDAO;</span>
+<span class="fc" id="L26">		this.OrderLineDAO = OrderLineDAO;</span>
+<span class="fc" id="L27">		this.ItemsDAO = ItemsDAO;</span>
+<span class="fc" id="L28">		this.utils = Utils;</span>
+<span class="fc" id="L29">	}</span>
+
+	@Override
+	public List&lt;Order&gt; readAll() {
+<span class="fc" id="L33">		List&lt;Order&gt; Orders = OrderDAO.readAll();</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">		for (Order O : Orders) {</span>
+<span class="fc" id="L35">			Long OrderID = O.getOrderID();</span>
+<span class="fc" id="L36">			List&lt;OrderLines&gt; OrderLines = OrderLineDAO.ReadAllOrdersBelongingToOrderID(OrderID);</span>
+<span class="fc" id="L37">			Logger.info(&quot;-----------------------------------\nORDER-&gt; &quot; + O.toString());</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">			for (OrderLines OrderLine : OrderLines) {// here</span>
+<span class="fc" id="L39">				Logger.info(&quot;Individual Items -&gt; &quot; + OrderLine.toString());</span>
+<span class="fc" id="L40">			}</span>
+<span class="fc" id="L41">		}</span>
+<span class="fc" id="L42">		return Orders;</span>
+	}
+
+	@Override
+	public Order create() {
+<span class="nc" id="L47">		Logger.info(&quot;What is the id of the customer the order is for&quot;);</span>
+<span class="nc" id="L48">		Long CustomerID = utils.getLong();</span>
+<span class="nc" id="L49">		Order OrderToCreate = new Order(CustomerID);</span>
+<span class="nc" id="L50">		Order Order = OrderDAO.create(OrderToCreate);// 1 is the current userid </span>
+<span class="nc" id="L51">		Long OrderID = Order.getOrderID();</span>
+<span class="nc" id="L52">		String Input = &quot;&quot;;</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">		while (!Input.equals(&quot;finish&quot;)) {</span>
+<span class="nc" id="L54">			Logger.info(&quot;What is the id of the item that you would like to add to the order?&quot;);</span>
+<span class="nc" id="L55">			Long ItemID = utils.getLong();</span>
+<span class="nc" id="L56">			Logger.info(&quot;How many items should be included in the order?&quot;);</span>
+<span class="nc" id="L57">			Long Quantity = utils.getLong();</span>
+<span class="nc" id="L58">			Logger.info(</span>
+					&quot;If you would like to add another item to the system please enter yes, if not please enter finish&quot;);
+<span class="nc" id="L60">			Input = utils.getString();</span>
+<span class="nc" id="L61">			OrderLineDAO.create(new OrderLines(OrderID, ItemID, Quantity));</span>
+<span class="nc" id="L62">		}</span>
+<span class="nc" id="L63">		return Order;</span>
+
+	}
+
+	@Override
+	public Order update() {//no updates its two seperate functions
+		// TODO Auto-generated method stub
+<span class="nc" id="L70">		return null;</span>
+	}
+
+	@Override
+	public int delete() {
+<span class="fc" id="L75">		Logger.info(&quot;What is the id of the order that you would like to delete&quot;);</span>
+<span class="fc" id="L76">		Long OrderID = utils.getLong();</span>
+<span class="fc" id="L77">		int ChildrenDeletedRecordsCount = OrderLineDAO.DeleteOrderLinesUsingOrderID(OrderID);</span>
+<span class="fc" id="L78">		int DeletedRecordsCount = OrderDAO.delete(OrderID);</span>
+<span class="fc" id="L79">		Logger.info(String.format(</span>
+				&quot;%x order records were deleted from the system and %x items were deleted from those orders.&quot;,
+<span class="fc" id="L81">				DeletedRecordsCount, ChildrenDeletedRecordsCount));</span>
+<span class="fc" id="L82">		return DeletedRecordsCount;</span>
+	}
+
+	public float CalculateCost() {
+<span class="fc" id="L86">		float Cost = 0f;</span>
+<span class="fc" id="L87">		Logger.info(&quot;What is the id of the order that you would like to know the cost of?&quot;);</span>
+<span class="fc" id="L88">		Long OrderID = utils.getLong();</span>
+<span class="fc" id="L89">		List&lt;OrderLines&gt; OrderLines = OrderLineDAO.ReadAllOrdersBelongingToOrderID(OrderID);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">		for (OrderLines OrderLine : OrderLines) {</span>
+<span class="fc" id="L91">			Long ItemID = OrderLine.getItemID();</span>
+<span class="fc" id="L92">			Items Item = ItemsDAO.read(ItemID);</span>
+<span class="fc" id="L93">			Cost += Item.getCost() * OrderLine.getQuantity();</span>
+<span class="fc" id="L94">		}</span>
+<span class="fc" id="L95">		Logger.info(String.format(&quot;The total cost of the order with the ID: %x is $%s&quot;, OrderID,</span>
+<span class="fc" id="L96">				String.format(&quot;%.02f&quot;, Cost)));</span>
+		// get all children records and get the items id from that and add the price
+<span class="fc" id="L98">		return Cost;</span>
+	}
+
+	public int DeleteItemFromOrder() {
+<span class="fc" id="L102">		Logger.info(&quot;What is the ID of the order that you want to delete an item from&quot;);</span>
+<span class="fc" id="L103">		Long OrderID = utils.getLong();</span>
+<span class="fc" id="L104">		Logger.info(&quot;What is the id of the item that you would like to remove. If this item exists multiple times in an order all of the orders for that item will be removed.&quot;);</span>
+<span class="fc" id="L105">		Long ItemID = utils.getLong();</span>
+<span class="fc" id="L106">		int RecordsDeleted = OrderLineDAO.DeleteOrderLinesUsingItemID(ItemID, OrderID);</span>
+<span class="fc" id="L107">		Logger.info(String.format(&quot;Item ID: %d was removed from Order ID: %d %d many times&quot;, ItemID, OrderID, RecordsDeleted));</span>
+<span class="fc" id="L108">		return RecordsDeleted;</span>
+	}
+	
+	public OrderLines AddItemToOrder() {
+<span class="fc" id="L112">		Logger.info(&quot;What is the ID of the order that you want to delete an item from&quot;);</span>
+<span class="fc" id="L113">		Long OrderID = utils.getLong();</span>
+<span class="fc" id="L114">		Logger.info(&quot;What is the id of the item that you would like to add to the order&quot;);</span>
+<span class="fc" id="L115">		Long ItemID = utils.getLong();</span>
+<span class="fc" id="L116">		Logger.info(&quot;How many items should be added to the order&quot;);</span>
+<span class="fc" id="L117">		Long Quantity = utils.getLong();</span>
+<span class="fc" id="L118">		OrderLines OrderAdded = OrderLineDAO.AddItemsToOrderLines(OrderID, ItemID, Quantity);</span>
+<span class="fc" id="L119">		Logger.info(&quot;Item added to the order&quot;);</span>
+<span class="fc" id="L120">		return OrderAdded;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
