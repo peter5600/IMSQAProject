@@ -44,9 +44,7 @@ public class Items {
 		return Cost;
 	}
 	public void setCost(float cost) {
-		if(cost > 0) {
 		Cost = cost;
-		}
 	}
 	
 	

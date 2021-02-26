@@ -1,6 +1,5 @@
 package com.qa.ims.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -47,7 +46,8 @@ public class OrderController implements CrudController<Order> {
 	public Order create() {
 		Logger.info("What is the id of the customer the order is for");
 		Long CustomerID = utils.getLong();
-		Order Order = OrderDAO.create(new Order(CustomerID));// 1 is the current userid
+		Order OrderToCreate = new Order(CustomerID);
+		Order Order = OrderDAO.create(OrderToCreate);// 1 is the current userid 
 		Long OrderID = Order.getOrderID();
 		String Input = "";
 		while (!Input.equals("finish")) {
@@ -65,7 +65,7 @@ public class OrderController implements CrudController<Order> {
 	}
 
 	@Override
-	public Order update() {
+	public Order update() {//no updates its two seperate functions
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -95,7 +95,7 @@ public class OrderController implements CrudController<Order> {
 		Logger.info(String.format("The total cost of the order with the ID: %x is $%s", OrderID,
 				String.format("%.02f", Cost)));
 		// get all children records and get the items id from that and add the price
-		return 0f;
+		return Cost;
 	}
 
 	public int DeleteItemFromOrder() {
