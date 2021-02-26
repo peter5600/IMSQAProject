@@ -82,7 +82,7 @@ and then checks that the delete function does what i have defined aboved using a
 
 ## Deploying on a Live server
 Follow the steps in the Getting started and installing steps.
-To deploy to a live server remove ``` drop schema `ims` ``` from the schema folder in main/resources this will make sure that the data isn't removed every time that application is launched.
+To deploy to a live server remove ``` drop schema `ims` ``` from the schema file in the main/resources folder this will make sure that the data isn't removed every time that application is launched.
 
 
 ## Built With
