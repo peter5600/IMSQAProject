@@ -57,8 +57,6 @@ public class OrderDAOTest {
 		assertEquals(1, DAO.delete(1l));//should be deleting the first record and returning one
 	}
 	
-	@Test
-	public void TestCost() {//This is a mockito test not a dao test
-		
-	}
+	
+	
 }

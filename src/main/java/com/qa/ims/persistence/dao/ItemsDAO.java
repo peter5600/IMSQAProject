@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.qa.ims.persistence.domain.Customer;
 import com.qa.ims.persistence.domain.Items;
 import com.qa.ims.utils.DBUtils;
 
@@ -82,9 +81,6 @@ public class ItemsDAO implements Dao<Items> {
 
 	@Override
 	public Items update(Items t) {
-		if(t.getID() == null) {
-			return null;//possible to create an item without an id this ensures it won't continue
-		}
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
 						.prepareStatement("UPDATE items SET name = ?, cost = ? WHERE id = ?");) {
@@ -120,7 +116,6 @@ public class ItemsDAO implements Dao<Items> {
 		Long ID = resultSet.getLong("id");
 		String ItemName = resultSet.getString("name");
 		float ItemCost = resultSet.getFloat("cost");
-		System.out.println(ID + " " + ItemName + " " + ItemCost);
 		return new Items(ID, ItemName, ItemCost);
 	}
 
