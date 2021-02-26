@@ -22,6 +22,15 @@ public class OrderLinesDAOTest {
 		DBUtils.getInstance().init("src/test/resources/sql-schema.sql", "src/test/resources/sql-data.sql");
 	}
 	
+	@Test
+	public void OrderLinesCreate() {
+		OrderLines Expected = new OrderLines(2l,1l,1l,1l);
+		OrderLines Actual = OrderLinesDAO.create(Expected);
+		assertEquals(Expected.getId(),Actual.getId());
+		assertEquals(Expected.getItemID(),Actual.getItemID());
+		assertEquals(Expected.getOrdersID(),Actual.getOrdersID());
+		assertEquals(Expected.getQuantity(),Actual.getQuantity());
+	}
 	
 	@Test 
 	public void ReadAllChildrenOrders() {
